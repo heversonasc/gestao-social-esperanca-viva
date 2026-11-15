@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ pessoa.nome }} — Gestão Social{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><div><h1 class="h2 mb-1">{{ pessoa.nome }}</h1><p class="text-secondary mb-0">Telefone: {{ pessoa.telefone|default:"Não informado" }} · {% if pessoa.ativo %}Cadastro ativo{% else %}Cadastro inativo{% endif %}</p></div><div class="d-flex gap-2"><a class="btn btn-outline-success" href="{% url 'core:person_update' pessoa.pk %}">Editar cadastro</a><a class="btn btn-success" href="{% url 'core:attendance_create_for_person' pessoa.pk %}">Registrar atendimento</a></div></div>
+<div class="card p-3"><h2 class="h4">Histórico de atendimentos</h2>
+{% if atendimentos %}<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Data</th><th scope="col">Descrição</th><th scope="col">Status</th></tr></thead><tbody>{% for item in atendimentos %}<tr><td>{{ item.data_atendimento|date:"d/m/Y H:i" }}</td><td>{{ item.descricao }}</td><td>{{ item.get_status_display }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="text-secondary mb-0">Ainda não existem atendimentos registrados para esta pessoa.</p>{% endif %}
+</div><a class="btn btn-link mt-3" href="{% url 'core:people_list' %}">Voltar à lista de pessoas</a>
+{% endblock %}
