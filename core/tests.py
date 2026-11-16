@@ -30,7 +30,7 @@ class GestaoSocialTests(TestCase):
     def test_lista_exige_login(self):
         response = self.client.get(reverse("core:people_list"))
         self.assertEqual(response.status_code, 302)
-        self.assertIn("contas/entrar", response.url)
+        self.assertIn("accounts/login", response.url)
 
     def test_usuario_autenticado_visualiza_lista(self):
         self.login()
@@ -235,7 +235,7 @@ class GestaoSocialTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertIn("contas/entrar", response.url)
+        self.assertIn("accounts/login", response.url)
 
     def test_novo_atendimento_exige_login(self):
         response = self.client.get(
@@ -243,4 +243,4 @@ class GestaoSocialTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertIn("contas/entrar", response.url)
+        self.assertIn("accounts/login", response.url)
