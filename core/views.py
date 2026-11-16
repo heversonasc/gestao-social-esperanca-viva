@@ -8,7 +8,7 @@ from .models import Atendimento, PessoaAtendida
 @login_required
 def people_list(request):
     termo = request.GET.get("q", "").strip()
-    pessoas = PessoaAtendida.objects.all()
+    pessoas = PessoaAtendida.objects.all().order_by("nome")
     if termo:
         pessoas = pessoas.filter(Q(nome__icontains=termo) | Q(telefone__icontains=termo))
     return render(request, "core/people_list.html", {"pessoas": pessoas, "termo": termo})
