@@ -51,7 +51,10 @@ if os.getenv("DB_ENGINE", "sqlite3").lower() == "postgresql":
         "PASSWORD": os.getenv("DB_PASSWORD", ""),
         "HOST": os.getenv("DB_HOST", "127.0.0.1"),
         "PORT": os.getenv("DB_PORT", "5432"),
-        "CONN_MAX_AGE": 60,
+        "CONN_MAX_AGE": int(os.getenv("DB_CONN_MAX_AGE", "60")),
+        "OPTIONS": {"sslmode": os.getenv("DB_SSLMODE", "prefer")},
+        # Necessário quando a conexão passa por um pooler em modo transação (ex.: Supabase, porta 6543).
+        "DISABLE_SERVER_SIDE_CURSORS": os.getenv("DB_POOLER", "False").lower() in {"1", "true", "yes", "on"},
     }}
 else:
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
@@ -84,5 +87,7 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
+    # A hospedagem (Vercel) termina o HTTPS e repassa o protocolo original neste cabeçalho.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
